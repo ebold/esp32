@@ -102,7 +102,7 @@ For more information on structure and contents of ESP-IDF projects, please refer
 
 ### 3.3. LV_HOR_RES_MAX, LV_VER_RES_MAX are not set in sdkconfig since LVGL v8.x
 
-* Define the display specific resolution in your source. Refer this [post](https://forum.lvgl.io/t/lv-hor-res-max-and-lv-ver-res-max/5817/2) for some hints.
+* Define the maximum display resolution in '**lvgl_helpers.h**'. Refer this [post](https://forum.lvgl.io/t/lv-hor-res-max-and-lv-ver-res-max/5817/2) for some hints.
  
 ### 3.4. Program upload failure
 
