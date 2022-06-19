@@ -5,6 +5,7 @@
  *      Author: ebold
  */
 #include "digital_clock.h"
+#include "hello_world.h"
 
 ESP_EVENT_DEFINE_BASE(MY_DIGITAL_CLOCK_EVENT);
 

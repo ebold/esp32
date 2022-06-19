@@ -13,10 +13,17 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_log.h"
+#include "nvs_flash.h"
+#include "hello_world.h"
 #include "digital_clock.h"
+#include "wifi_station.h"
 
 /* Globals */
-char strftime_buf[64];  // store formatted timeinfo
+char strftime_buf[64];       // store formatted timeinfo
+static int s_retry_num = 0;  // wifi retry count
+
+/* FreeRTOS event group to signal when we are connected*/
+static EventGroupHandle_t s_wifi_event_group;
 
 static void print_chip_info(void)
 {
@@ -69,6 +76,28 @@ static void sys_time_event_handler(void* handler_arg, esp_event_base_t base, int
 	dc_display_text(strftime_buf);
 }
 
+static void wifi_event_handler(void* arg, esp_event_base_t event_base,
+                                int32_t event_id, void* event_data)
+{
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
+        esp_wifi_connect();
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        if (s_retry_num < EXAMPLE_ESP_MAXIMUM_RETRY) {
+            esp_wifi_connect();
+            s_retry_num++;
+            ESP_LOGI(TAG, "retry to connect to the AP");
+        } else {
+            xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
+        }
+        ESP_LOGI(TAG,"connect to the WiFi AP fail");
+    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
+        ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
+        s_retry_num = 0;
+        xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+    }
+}
+
 void app_main(void)
 {
     /* Print chip information */
@@ -82,6 +111,18 @@ void app_main(void)
 
 	/* Register an event handler for clock handler */
 	dc_add_event_handler(my_clock, sys_time_event_handler, NULL);
+
+	/* Initialize NVS for WiFi credentials */
+	esp_err_t ret = nvs_flash_init();
+	if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+		ESP_ERROR_CHECK(nvs_flash_erase());
+		ret = nvs_flash_init();
+	}
+	ESP_ERROR_CHECK(ret);
+
+	/* Initialize a WiFi station handler */
+	s_wifi_event_group = xEventGroupCreate();
+	init_wifi_station(s_wifi_event_group, wifi_event_handler);
 
 	vTaskDelay(1000 / portTICK_PERIOD_MS);
 

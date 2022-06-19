@@ -21,9 +21,6 @@ typedef enum {
 	SYSTEM_TIME_UPDATE
 } sys_time_evt_id_t;
 
-/* Defines */
-#define TAG "myClock"
-
 /* LVLG relevant */
 #include "freertos/semphr.h"
 #include "esp_freertos_hooks.h"
