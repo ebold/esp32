@@ -1,9 +1,12 @@
 /*
  * wifi_station.h
  *
+ * Derived from WiFi station example [1].
+ *
  *  Created on: Jun 19, 2022
- *  Derived from WiFi station example.
  *      Author: ebold
+ *
+ * [1] WiFi station example, https://github.com/espressif/esp-idf/tree/v4.4.1/examples/wifi/getting_started/station
  */
 
 #ifndef MAIN_WIFI_STATION_H_

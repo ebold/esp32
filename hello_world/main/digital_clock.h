@@ -1,8 +1,12 @@
 /*
  * digital_clock.h
  *
+ * Derived from peripheral example [1].
+ *
  *  Created on: Jun 12, 2022
  *      Author: ebold
+ *
+ * [1] NMEA parser example, https://github.com/espressif/esp-idf/tree/v4.4.1/examples/peripherals/uart/nmea0183_parser
  */
 
 #ifndef MAIN_DIGITAL_CLOCK_H_

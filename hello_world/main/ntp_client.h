@@ -1,9 +1,12 @@
 /*
  * ntp_client.h
  *
- * Derived from the standard LwIP SNTP example.
+ * Derived from the standard LwIP SNTP example [1].
+ *
  *  Created on: Jun 19, 2022
  *      Author: ebold
+ *
+ * [1] LwIP SNTP example, https://github.com/espressif/esp-idf/tree/v4.4.1/examples/protocols/sntp
  */
 
 #ifndef MAIN_NTP_CLIENT_H_
