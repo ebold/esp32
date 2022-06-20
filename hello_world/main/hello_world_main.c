@@ -123,6 +123,9 @@ void app_main(void)
 	}
 	ESP_ERROR_CHECK(ret);
 
+	/* Create the default event loop */
+	// The default event loop is used for the system events (ie., WiFi, SNTP events)
+	ESP_ERROR_CHECK(esp_event_loop_create_default());
 	/* Initialize a WiFi station handler */
 	s_wifi_event_group = xEventGroupCreate();
 	init_wifi_station(s_wifi_event_group, wifi_event_handler);
