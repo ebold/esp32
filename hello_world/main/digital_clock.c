@@ -168,7 +168,7 @@ void dc_display_text(char *disp_text)
 {
     // Modify the Label's text
     lv_label_set_text(screen_label, disp_text);
-    ESP_LOGI(TAG, "display: %s\n", disp_text);
+    //ESP_LOGI(TAG, "display: %s\n", disp_text);
 }
 
 static void display_task_entry(void* arg)
