@@ -17,6 +17,7 @@
 #include "hello_world.h"
 #include "digital_clock.h"
 #include "wifi_station.h"
+#include "ntp_client.h"
 
 // [1] Time zones, https://github.com/G6EJD/ESP32-Time-Services-and-SETENV-variable
 
@@ -79,6 +80,16 @@ static void sys_time_event_handler(void* handler_arg, esp_event_base_t base, int
 	dc_display_text(strftime_buf);
 }
 
+static void time_sync_notification_cb(struct timeval *tv)
+{
+	/* Notify time synchronization.
+	 * The sync interval is set in menuconfig: Component config -> LWIP -> SNTP -> CONFIG_LWIP_SNTP_UPDATE_DELAY
+	 * The default value is 1 hour.
+	 * Use sntp_set_sync_interval(uint32_t interval_ms) and sntp_restart() to change the update interval.
+	 */
+	ESP_LOGI(TAG, "Notification of a SNPT time synchronization event");
+}
+
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
 {
@@ -126,6 +137,10 @@ void app_main(void)
 	/* Create the default event loop */
 	// The default event loop is used for the system events (ie., WiFi, SNTP events)
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+	/* Initialize a NTP client */
+	nc_init(time_sync_notification_cb);
+
 	/* Initialize a WiFi station handler */
 	s_wifi_event_group = xEventGroupCreate();
 	init_wifi_station(s_wifi_event_group, wifi_event_handler);
