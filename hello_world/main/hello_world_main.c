@@ -18,7 +18,10 @@
 #include "digital_clock.h"
 #include "wifi_station.h"
 
+// [1] Time zones, https://github.com/G6EJD/ESP32-Time-Services-and-SETENV-variable
+
 /* Globals */
+const char* TZ_Europe_Berlin="CET-1CEST,M3.5.0,M10.5.0/3"; // TZ for Europe/Berlin, POSIX.1 format 2 [1]
 char strftime_buf[64];       // store formatted timeinfo
 static int s_retry_num = 0;  // wifi retry count
 
@@ -43,13 +46,13 @@ static void print_chip_info(void)
     printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 }
 
-static void set_time_zone(char * tz_name)
+static void set_time_zone(const char * tz_name)
 {
 	time_t now;
 	struct tm timeinfo;
 
     time(&now);
-    setenv("TZ", tz_name, 1); // Central European Summer Time
+    setenv("TZ", tz_name, 1);
     tzset();
 
     localtime_r(&now, &timeinfo);
@@ -104,7 +107,7 @@ void app_main(void)
 	print_chip_info();
 
     /* Set the system time zone */
-	set_time_zone("CEST+2");
+	set_time_zone(TZ_Europe_Berlin); // Central European Summer Time
 
 	/* Initialize a digital clock handler */
 	clock_handle_t* my_clock = dc_create_clock_handle();
