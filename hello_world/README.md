@@ -6,7 +6,7 @@ This example is derived from an existing "Hello World" example from the ESP-IDF 
 
 ## 1. How to run this example
 
-Follow detailed instructions to set up development environment and run this example. Tested on a host system with **Linux Mint 19.3**.
+Follow detailed instructions to set up development environment and run this example. Tested on a host system with **Linux Mint 19.3/22**.
 
 ### 1.1. General
 
@@ -66,11 +66,17 @@ Now you're ready to run this example from Eclipse.
 Import this example as a new project.
 Build and run this demo. Follow the configure and build instructions from the ESP-IDF [Get started](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/index.html) guide.
 
+Tested with following ESP32 boards:
+* ESP32-WROOM-32D (with internal Wifi antenna)
+* ESP32-WROOM-32U (with external 2.4GHz antenna)
+
+External SSD1306 display is used together with both boards.
+
 ## 2. Example folder contents
 
 The project **hello_world** contains one source file in C language [hello_world_main.c](main/hello_world_main.c). The file is located in folder [main](main).
 
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both). 
+ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both).
 
 Below is short explanation of remaining files in the project folder.
 
@@ -103,7 +109,7 @@ For more information on structure and contents of ESP-IDF projects, please refer
 ### 3.3. LV_HOR_RES_MAX, LV_VER_RES_MAX are not set in sdkconfig since LVGL v8.x
 
 * Define the maximum display resolution in '**lvgl_helpers.h**'. Refer this [post](https://forum.lvgl.io/t/lv-hor-res-max-and-lv-ver-res-max/5817/2) for some hints.
- 
+
 ### 3.4. Program upload failure
 
 * Hardware connection is not correct: run `idf.py -p PORT monitor`, and reboot your board to see if there are any output logs.
